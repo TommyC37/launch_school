@@ -1,0 +1,1 @@
+let names = ['Bubba', 'Lieutenant Dan', 'Aurora', 'Lulu', 'Iggy', 'Fitz'];

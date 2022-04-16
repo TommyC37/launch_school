@@ -1,0 +1,5 @@
+/*
+Exception handling is predictably managing errors that may occuring during the
+execution of your program. It solves the problem of crashing your program if
+an exception is thrown.
+*/
