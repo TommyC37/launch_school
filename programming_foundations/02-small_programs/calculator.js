@@ -6,6 +6,14 @@
 
 const readline = require('readline-sync');
 
+function prompt(msg) {
+  console.log(`\n=> ${msg}`);
+}
+
+function errorPrompt(msg) {
+  console.log(`\n~~ERROR~~=> ${msg}\n`);
+}
+
 console.log(" _____________________");
 console.log("|  _________________  |");
 console.log("| |   *BEEP BOOP*   | |");
@@ -21,46 +29,61 @@ console.log("| | . | 0 | = | | / | |");
 console.log("| |___|___|___| |___| |");
 console.log("|_____________________|");
 
-console.log('\n\n*BEEP BOOP* Welcome to the calcul8r!');
+prompt('*BEEP BOOP* Welcome to the calcul8r!');
 
-let number1;
-do {
-  number1 = Number(readline.question('\nWhat is the first number?\n'));
-  if (isNaN(number1)) {
-    console.log('\n~~ERROR!~~\nThat is not a valid number.');
+let continuePlaying = true;
+
+while (continuePlaying) {
+
+  let number1;
+  do {
+    number1 = Number(readline.question(prompt('What is the first number?')));
+    if (isNaN(number1)) {
+      errorPrompt('That is not a valid number.');
+    }
+  } while (isNaN(number1));
+
+  let number2;
+  do {
+    number2 = Number(readline.question(prompt('What is the second number?')));
+    if (isNaN(number2)) {
+      console.log(errorPrompt('That is not a valid number.'));
+    }
+  } while (isNaN(number2));
+
+  let result;
+  let operation = '';
+
+  while (operation === '') {
+    operation = readline.question(prompt('What operation would you like to perform?'));
+    switch (operation) {
+      case '+':
+        result = number1 + number2;
+        break;
+      case '-':
+        result = number1 - number2;
+        break;
+      case '*':
+        result = number1 * number2;
+        break;
+      case '/':
+        result = number1 / number2;
+        break;
+      default:
+        operation = '';
+        console.log(errorPrompt("Please choose from the following operations: + - * /"));
+    }
   }
-} while (isNaN(number1));
 
-let number2;
-do {
-  number2 = Number(readline.question('\nWhat is the second number?\n'));
-  if (isNaN(number2)) {
-    console.log('\n~~ERROR!~~\nThat is not a valid number.');
+  console.log(`\n${number1} ${operation} ${number2} = ${result}`);
+
+  while (true) {
+    continuePlaying = Number(readline.question(prompt('Would you like to continue playing?\nEnter 1 for yes. Enter 0 for no.')));
+    if (continuePlaying === 1 || continuePlaying === 0) {
+      break;
+    } else {
+      errorPrompt("Please enter 1 for yes or 0 for no.");
+    }
   }
-} while (isNaN(number2));
 
-let result;
-let operation = '';
-
-while (operation === '') {
-  operation = readline.question('\nWhat operation would you like to perform?\n');
-  switch (operation) {
-    case '+':
-      result = number1 + number2;
-      break;
-    case '-':
-      result = number1 - number2;
-      break;
-    case '*':
-      result = number1 * number2;
-      break;
-    case '/':
-      result = number1 / number2;
-      break;
-    default:
-      operation = '';
-      console.log("\n~~ERROR!~~\nPlease choose from the following operations: + - * /\n");
-  }
 }
-
-console.log(`${number1} ${operation} ${number2} = ${result}`);
