@@ -1,0 +1,58 @@
+{
+  "language_query":"Please choose a language. Enter 1 for English or 2 for Spanish.\n=> Elija un idioma. Ingrese 1 para inglés o 2 para español.",
+  "language_error":"That's not a valid number. Please enter 1 for English or 2 for Spanish.\n=> Ese no es un número válido. Ingrese 1 para inglés o 2 para español.",
+  "english": {
+    "welcome_img":[
+      " _____________________",
+      "|  _________________  |",
+      "| |   *BEEP BOOP*   | |",
+      "| |_________________| |",
+      "|  ___ ___ ___   ___  |",
+      "| | 7 | 8 | 9 | | + | |",
+      "| |___|___|___| |___| |",
+      "| | 4 | 5 | 6 | | - | |",
+      "| |___|___|___| |___| |",
+      "| | 1 | 2 | 3 | | x | |",
+      "| |___|___|___| |___| |",
+      "| | . | 0 | = | | / | |",
+      "| |___|___|___| |___| |",
+      "|_____________________|"
+    ],
+    "welcome_msg":"*BEEP BOOP* Welcome to the calcul8r!",
+    "error":"\n~~ERROR~~\n",
+    "first_num":"What is the first number?",
+    "second_num":"What is the second number?",
+    "invalid_num":"That is not a valid number.",
+    "operation":"What operation would you like to perform?",
+    "operation_error":"Please choose from the following operations: + - * /",
+    "continue":"Would you like to continue playing?\nEnter 1 for yes. Enter 0 for no. Enter 2 to select a new language.",
+    "continue_error":"Please enter 1 for yes, 0 for no, or 2 to select a new language."
+  },
+  "spanish": {
+    "welcome_img":[
+      " _____________________",
+      "|  _________________  |",
+      "| |   *BIP BOOP*    | |",
+      "| |_________________| |",
+      "|  ___ ___ ___   ___  |",
+      "| | 7 | 8 | 9 | | + | |",
+      "| |___|___|___| |___| |",
+      "| | 4 | 5 | 6 | | - | |",
+      "| |___|___|___| |___| |",
+      "| | 1 | 2 | 3 | | x | |",
+      "| |___|___|___| |___| |",
+      "| | . | 0 | = | | / | |",
+      "| |___|___|___| |___| |",
+      "|_____________________|"
+    ],
+    "welcome_msg":"*BIP BOOP* Bienvenido a la calculadora!",
+    "error":"\n~~ERROR~~\n",
+    "first_num":"¿Cuál es el primer número?",
+    "second_num":"¿Cuál es el segundo número?",
+    "invalid_num":"Ese no es un número válido.",
+    "operation":"¿Qué operación le gustaría realizar?",
+    "operation_error":"Elija entre las siguientes operaciones: + - * /",
+    "continue":"¿Te gustaría seguir jugando?\nIngrese 1 para sí. Ingrese 0 para no. Ingrese 2 para seleccionar un nuevo idioma.",
+    "continue_error":"Ingrese 1 para sí, 0 para no o 2 para seleccionar un nuevo idioma."
+  } 
+}
