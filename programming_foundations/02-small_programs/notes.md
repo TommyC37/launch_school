@@ -44,3 +44,13 @@ Values that evaluate as false:
 6. NaN
 
 A good mnemonic device for memorizing the false values is "FUNZEN" (z=zero, e=empty string).
+
+## Errors
+
+1. ReferenceError - occurs when you attempt to use a variable or function that doesn't exist.
+2. TypeError - occurs in a variety of ways. Some common ways include:
+    - accessing a property on a value that does not have any properties such as null or undefined.
+    - trying to call something that isn't a funciton
+    - trying to reassign a const variable.
+
+3. SyntaxError - almost always occurs immediately after loading a JavaScript program but before it runs.
