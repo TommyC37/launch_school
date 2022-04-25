@@ -1,0 +1,29 @@
+{
+  "messages": {
+    "welcome": "\nWelcome to Rock, Paper, Scissors, Spock, Lizard!",
+    "speed_round_hint": "Pssst...if you pass an integer as an argument when running rps.js from the terminal, we'll play that number of speed rounds for you :)\n e.g. If you enter `node rps.js 12` into the terminal, we'll run 12 rounds automatically for you.\n",
+    "speed_round_start": "~SPEED ROUND~\nNOTE: Speed round results do not count towards all time match results.",
+    "continue_message": "Would you like to continue playing? Enter 1 for yes or 0 for no."
+  },
+  "valid_choices": [
+    "rock",
+    "paper",
+    "scissors",
+    "spock",
+    "lizard"
+  ],
+  "valid_shorthand_choices": {
+    "r": "rock",
+    "p": "paper",
+    "sc": "scissors",
+    "sp": "spock",
+    "l": "lizard"
+  },
+  "winning_combos": {
+    "rock": ["scissors", "lizard"],
+    "paper": ["rock", "spock"],
+    "scissors": ["paper", "lizard"],
+    "spock": ["scissors", "rock"],
+    "lizard": ["paper", "spock"]
+  }
+}

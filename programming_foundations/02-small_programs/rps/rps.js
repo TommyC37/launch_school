@@ -1,19 +1,25 @@
 var args = process.argv;
+const FS = require('fs');
+const DATA = './rps_data.json';
+const ALL_TIME_RESULTS = './rps_all_time_results.json';
+const DATA_FILE = require(DATA);
+var allTimeResultsLocal = JSON.parse(FS.readFileSync(ALL_TIME_RESULTS));
+const READLINE = require('readline-sync');
 
 // Welcome
-console.log('\nWelcome to Rock, Paper, Scissors!');
+console.log(DATA_FILE.messages.welcome);
 
 // Variable declarations
-const READLINE = require('readline-sync');
-const VALID_CHOICES = ['rock', 'paper', 'scissors'];
 let continuePlaying;
 let playerChoice;
 let computerChoice;
 let result;
-let sessionOutcomes = {
-  playerWins: 0,
-  computerWins: 0,
-  draws: 0
+let sessionMatch = 1;
+let sessionRound = 1;
+let sessionScore = {
+  playerRoundWins: 0,
+  computerRoundWins: 0,
+  roundDraws: 0
 };
 
 // Function declarations
@@ -22,13 +28,18 @@ function prompt(msg) {
 }
 
 function userChoose() {
-  prompt(`Choose one: ${VALID_CHOICES.join(", ")}`);
-  return READLINE.question().toLowerCase();
+  prompt(`Choose one: ${DATA_FILE.valid_choices.join(', ')}`);
+  let response = READLINE.question().toLowerCase();
+  if (response in DATA_FILE.valid_shorthand_choices) {
+    return DATA_FILE.valid_shorthand_choices[response];
+  } else {
+    return response;
+  }
 }
 
 function randomChoice() {
-  let randIndex = Math.floor(Math.random() * (VALID_CHOICES.length));
-  return VALID_CHOICES[randIndex];
+  let randIndex = Math.floor(Math.random() * (DATA_FILE.valid_choices.length));
+  return DATA_FILE.valid_choices[randIndex];
 }
 
 function winLoseOrDraw(playerChoice, computerChoice) {
@@ -36,60 +47,95 @@ function winLoseOrDraw(playerChoice, computerChoice) {
   // E.g. ['win', 'You win!']
   if (playerChoice === computerChoice) {
     return ['draw', "It's a draw!"];
-  } else if ((playerChoice === 'rock' && computerChoice === 'scissors') ||
-            (playerChoice === 'paper' && computerChoice === 'rock') ||
-            (playerChoice === 'scissors' && computerChoice === 'paper')) {
+  } else if (DATA_FILE.winning_combos[playerChoice].includes(computerChoice)) {
     return ['win', 'You win!'];
   } else {
     return ['lose', 'Drats! You lost :('];
   }
 }
 
-function displayScoreboard() {
+function displayScoreboard(scoreboardTitle) {
   console.log('\n');
-  prompt('~SCOREBOARD~');
-  prompt(`Player wins: ${sessionOutcomes.playerWins}`);
-  prompt(`Computer wins: ${sessionOutcomes.computerWins}`);
-  prompt(`Draws: ${sessionOutcomes.draws}`);
+  prompt(`~${scoreboardTitle} SCOREBOARD~`);
+  prompt(`Player wins: ${sessionScore.playerRoundWins}`);
+  prompt(`Computer wins: ${sessionScore.computerRoundWins}`);
+  prompt(`Draws: ${sessionScore.roundDraws}`);
+  console.log('\n');
+}
+
+function displayAllTimeMatchResults() {
+  console.log('\n');
+  prompt('~ALL TIME MATCH RESULTS~');
+  prompt(`Player wins: ${allTimeResultsLocal.player_match_wins}`);
+  prompt(`Computer wins: ${allTimeResultsLocal.computer_match_wins}`);
   console.log('\n');
 }
 
 function updateScoreboard(result) {
-  if (result === 'win') {
-    sessionOutcomes.playerWins += 1;
+  if (result === 'new match') {
+    sessionScore.playerRoundWins = 0;
+    sessionScore.computerRoundWins = 0;
+    sessionScore.roundDraws = 0;
+  } else if (result === 'win') {
+    sessionScore.playerRoundWins += 1;
   } else if (result === 'lose') {
-    sessionOutcomes.computerWins += 1;
+    sessionScore.computerRoundWins += 1;
   } else {
-    sessionOutcomes.draws += 1;
+    sessionScore.roundDraws += 1;
   }
 }
 
-// If a numeric argument was passed into the program,
-// use the number to execute n number of speed rounds
+function matchWon() {
+  if (sessionScore.computerRoundWins === 5) {
+    allTimeResultsLocal.computer_match_wins += 1;
+    prompt('Computer wins match!');
+  } else if (sessionScore.playerRoundWins === 5) {
+    allTimeResultsLocal.player_match_wins += 1;
+  }
+
+  FS.writeFile(ALL_TIME_RESULTS,
+    JSON.stringify(allTimeResultsLocal, null, 2), finished);
+  function finished(err) {
+    if (err) throw err;
+    prompt('All time match results updated.');
+  }
+
+  updateScoreboard('new match');
+  sessionMatch += 1;
+  sessionRound = 1;
+  displayAllTimeMatchResults();
+  prompt('\nNEW MATCH\n');
+}
+
+displayAllTimeMatchResults();
+
+// Speed round: if a numeric argument was passed into the program,
+// use the argument value to execute n number of speed rounds
 if (args.length === 2) {
-  console.log("Pssst...if you pass an integer as an argument when running rps.js from the terminal, we'll play that number of speed rounds for you :)");
-  console.log("e.g. If you run `node rps.js 12`, we'll run 12 rounds automatically for you.\n");
+  console.log(DATA_FILE.messages.speed_round_hint);
 } else if (isNaN(args[2])) {
   console.log('\n');
   prompt(`The argument "${args[2]}" is uninterpretable. No speed rounds played. Starting normal game.\n`);
 } else {
   console.log('\n');
-  prompt('SPEED ROUND!');
+  prompt(DATA_FILE.messages.speed_round_start);
   for (let round = args[2]; round > 0; round--) {
     playerChoice = randomChoice();
     computerChoice = randomChoice();
     result = winLoseOrDraw(playerChoice, computerChoice);
     updateScoreboard(result[0]);
   }
-  prompt(`Speed rounds played: ${sessionOutcomes.playerWins + sessionOutcomes.computerWins + sessionOutcomes.draws}`);
-  displayScoreboard();
+  prompt(`Speed rounds played: ${sessionScore.playerRoundWins + sessionScore.computerRoundWins + sessionScore.roundDraws}`);
+  displayScoreboard('SPEED ROUND');
+  updateScoreboard('new match');
 }
 
 // Play regular game
 do {
+  prompt(`Match ${sessionMatch}, Round ${sessionRound}`);
   playerChoice = userChoose();
 
-  while (!VALID_CHOICES.includes(playerChoice)) {
+  while (!(DATA_FILE.valid_choices.includes(playerChoice))) {
     prompt('Invalid Choice!');
     playerChoice = userChoose();
   }
@@ -101,14 +147,21 @@ do {
   updateScoreboard(result[0]);
   prompt(result[1]);
 
-  displayScoreboard();
+  displayScoreboard(`MATCH ${sessionMatch}`);
 
-  prompt('Would you like to continue playing? Enter 1 for yes or 0 for no.');
+  if (sessionScore.playerRoundWins === 5 ||
+      sessionScore.computerRoundWins === 5) {
+    matchWon();
+  } else {
+    sessionRound += 1;
+  }
+
+  prompt(DATA_FILE.messages.continue_message);
   continuePlaying = Number(READLINE.question());
 
   while (![1, 0].includes(continuePlaying)) {
     prompt('Invalid response!');
-    prompt('Would you like to continue playing? Enter 1 for yes or 0 for no.');
+    prompt(DATA_FILE.messages.continue_message);
     continuePlaying = Number(READLINE.question());
   }
 
