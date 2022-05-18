@@ -1,4 +1,4 @@
-let produce = {
+ let produce = {
   apple: 'Fruit',
   carrot: 'Vegetable',
   pear: 'Fruit',
